@@ -1,61 +1,51 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useState, useCallback, Suspense } from 'react'
 import { useDebounce } from '@/hooks/useDebounce'
 
 interface SearchBarProps {
   initialSearch?: string
 }
 
-export function SearchBar({ initialSearch = '' }: SearchBarProps) {
+function SearchBarContent({ initialSearch = '' }: SearchBarProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(initialSearch)
   const debouncedSearch = useDebounce(search, 300)
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      if (value) {
-        params.set(name, value)
+  const handleSearch = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (search.trim()) {
+        router.push(`/?search=${encodeURIComponent(search.trim())}`)
       } else {
-        params.delete(name)
+        router.push('/')
       }
-      params.delete('page') // Reset to first page on new search
-      return params.toString()
     },
-    [searchParams]
+    [router, search]
   )
 
-  useEffect(() => {
-    if (debouncedSearch !== initialSearch) {
-      const queryString = createQueryString('search', debouncedSearch)
-      router.push(queryString ? `/?${queryString}` : '/')
-    }
-  }, [debouncedSearch, initialSearch, router, createQueryString])
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const queryString = createQueryString('search', search)
-    router.push(queryString ? `/?${queryString}` : '/')
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="relative">
-      <div className="max-w-xl mx-auto">
+    <form onSubmit={handleSearch} className="w-full max-w-3xl mx-auto">
+      <div className="relative">
         <input
           type="text"
-          placeholder="Search companies by name or CIN..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+          placeholder="Search companies..."
+          className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-gray-600"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-gray-700"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -66,5 +56,13 @@ export function SearchBar({ initialSearch = '' }: SearchBarProps) {
         </button>
       </div>
     </form>
+  )
+}
+
+export function SearchBar(props: SearchBarProps) {
+  return (
+    <Suspense fallback={<div className="w-full h-10 bg-gray-100 animate-pulse rounded-lg" />}>
+      <SearchBarContent {...props} />
+    </Suspense>
   )
 } 
