@@ -1,0 +1,25 @@
+## Build a nextjs seo friendly website for companies details showing. Having below features:
+1. There are 30 lakh+ companies data in postgres database. 
+2. Website will list all companies with pagination on the home page.
+3. On clicking on a company, it will show the company details in a new page.
+4. The company details page should have the company name, address, phone number, email, website, and other relevant information.
+5. The website should be responsive and look good on both mobile and desktop.
+6. The website should be seo friendly and have a proper title and meta description for each page. and all other technical SEO for best google search results.
+7. The website should be fast and have a good user experience.
+8. The website should be secure and have a proper https setup.
+
+
+postgres db is local:
+dbname: companies
+username: postgres
+password: 1234
+host: localhost
+port: 5432
+
+table name: companies_data
+table columns:
+id	cin	company_name	company_roc_code	company_category	company_subcategory	company_class	authorized_capital	paidup_capital	company_reg_date	reg_office_address	listing_status	company_status	company_state_code	company_country	nic_code	company_industrial_classification	url_title
+
+create sitemap for all companies.
+keep urls for companies details seo friendly.
+optimize for when anyone search with company name, it should show the company details page.

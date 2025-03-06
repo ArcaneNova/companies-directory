@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CompaniesData {
+  id                                Int       @id @default(autoincrement())
+  cin                               String?   @db.VarChar(255)
+  company_name                      String?
+  company_roc_code                  String?   @db.VarChar(50)
+  company_category                  String?   @db.VarChar(100)
+  company_subcategory               String?   @db.VarChar(100)
+  company_class                     String?   @db.VarChar(50)
+  authorized_capital                Decimal?  @db.Decimal(15, 2)
+  paidup_capital                    Decimal?  @db.Decimal(15, 2)
+  company_reg_date                  DateTime? @db.Date
+  reg_office_address                String?
+  listing_status                    String?   @db.VarChar(50)
+  company_status                    String?   @db.VarChar(50)
+  company_state_code                String?   @db.VarChar(50)
+  company_country                   String?   @db.VarChar(100)
+  nic_code                          String?   @db.VarChar(50)
+  company_industrial_classification String?
+  url_title                         String?
+
+  @@index([url_title], map: "idx_companies_url_title")
+  @@map("companies_data")
+}
