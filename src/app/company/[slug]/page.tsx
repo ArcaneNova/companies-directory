@@ -38,10 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: company.company_name,
-    description: `View detailed information about ${company.company_name}, including registration details, financial data, and more.`,
+    description: `View detailed information about ${company.company_name || ''}, including registration details, financial data, and more.`,
     openGraph: {
-      title: company.company_name,
-      description: `View detailed information about ${company.company_name}, including registration details, financial data, and more.`,
+      title: company.company_name || '',
+      description: `View detailed information about ${company.company_name || ''}, including registration details, financial data, and more.`,
       type: 'website',
     },
   }
@@ -244,8 +244,8 @@ export default async function CompanyPage({ params }: Props) {
                     </div>
                   )}
                   <CompanyMap
-                    address={`${company.reg_office_address}, ${company.company_state_code}, India`}
-                    companyName={company.company_name}
+                    address={`${company.reg_office_address || ''}, ${company.company_state_code || ''}, India`}
+                    companyName={company.company_name || ''}
                   />
                 </div>
               </section>

@@ -1,0 +1,33 @@
+"use strict";(()=>{var e={};e.id=717,e.ids=[717],e.modules={3524:e=>{e.exports=require("@prisma/client")},399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},517:e=>{e.exports=require("next/dist/compiled/next-server/app-route.runtime.prod.js")},5315:e=>{e.exports=require("path")},2792:(e,t,r)=>{r.r(t),r.d(t,{originalPathname:()=>P,patchFetch:()=>O,requestAsyncStorage:()=>S,routeModule:()=>_,serverHooks:()=>F,staticGenerationAsyncStorage:()=>j});var i={};r.r(i),r.d(i,{default:()=>x});var a={};r.r(a),r.d(a,{GET:()=>A});var n=r(9303),o=r(8716),s=r(3131),l=r(5661),p=r(3524);let m=globalThis.prisma??new p.PrismaClient({log:["query","error","warn"],errorFormat:"pretty"}),c=require("fs");var u=r.n(c),f=r(5315),d=r.n(f);let y="public/sitemaps",g="https://mycompanydirectory.net";async function h(e,t){let r=`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${e.map(e=>`  <url>
+    <loc>${e.url}</loc>
+    ${e.lastmod?`<lastmod>${e.lastmod}</lastmod>`:""}
+    ${e.changefreq?`<changefreq>${e.changefreq}</changefreq>`:""}
+    ${e.priority?`<priority>${e.priority}</priority>`:""}
+  </url>`).join("\n")}
+</urlset>`;await u().promises.writeFile(d().join(process.cwd(),y,t),r)}async function w(e){let t=`<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${e.map(e=>`  <sitemap>
+    <loc>${g}/sitemaps/${e}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>`).join("\n")}
+</sitemapindex>`;await u().promises.writeFile(d().join(process.cwd(),y,"sitemap-index.xml"),t);let r=`<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${g}/sitemaps/sitemap-index.xml</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
+</sitemapindex>`;await u().promises.writeFile(d().join(process.cwd(),"public","sitemap.xml"),r)}async function x(){let e=d().join(process.cwd(),y);u().existsSync(e)||await u().promises.mkdir(e,{recursive:!0});let t=[{url:g,changefreq:"daily",priority:1},{url:`${g}/about`,changefreq:"weekly",priority:.8},{url:`${g}/contact`,changefreq:"weekly",priority:.8},{url:`${g}/privacy-policy`,changefreq:"monthly",priority:.5},{url:`${g}/terms-of-service`,changefreq:"monthly",priority:.5},{url:`${g}/faq`,changefreq:"weekly",priority:.7},{url:`${g}/help-center`,changefreq:"weekly",priority:.7}];await h(t,"sitemap-static.xml");let r=["sitemap-static.xml"],i=[],a=1,n=0,o=!0;for(;o;){console.log(`Processing batch starting at offset ${n}...`);let e=await m.companiesData.findMany({skip:n,take:1e4,select:{id:!0,url_title:!0,company_reg_date:!0,company_status:!0},orderBy:{id:"asc"}});if(0===e.length){o=!1;continue}for(let t of e){let e={url:`${g}/company/${t.url_title||t.id}`,lastmod:t.company_reg_date?.toISOString()||new Date().toISOString(),changefreq:"monthly",priority:t.company_status?.toLowerCase()==="active"?.8:.5};if(i.push(e),5e4===i.length){let e=`sitemap-companies-${a}.xml`;console.log(`Writing sitemap file: ${e}`),await h(i,e),r.push(e),i=[],a++}}n+=1e4,console.log(`Processed ${n} companies...`)}if(i.length>0){let e=`sitemap-companies-${a}.xml`;console.log(`Writing final sitemap file: ${e}`),await h(i,e),r.push(e)}return console.log("Creating sitemap index and main sitemap.xml..."),await w(r),t}var $=r(707);let v={...i},q=v.default,b=v.generateSitemaps;if("function"!=typeof q)throw Error('Default export is missing in "E:\\All Feb Projects 2025\\companies-website-next\\src\\app\\sitemap.ts"');async function A(e,t){let r;let{__metadata_id__:i,...a}=t.params||{},n=b?await b():null;if(n&&null==(r=n.find(e=>{let t=e.id.toString();return(t+=".xml")===i})?.id))return new l.NextResponse("Not Found",{status:404});let o=await q({id:r}),s=(0,$.resolveRouteData)(o,"sitemap");return new l.NextResponse(s,{headers:{"Content-Type":"application/xml","Cache-Control":"public, max-age=0, must-revalidate"}})}let _=new n.AppRouteRouteModule({definition:{kind:o.x.APP_ROUTE,page:"/sitemap.xml/route",pathname:"/sitemap.xml",filename:"sitemap",bundlePath:"app/sitemap.xml/route"},resolvedPagePath:"next-metadata-route-loader?page=%2Fsitemap.xml%2Froute&filePath=E%3A%5CAll%20Feb%20Projects%202025%5Ccompanies-website-next%5Csrc%5Capp%5Csitemap.ts&isDynamic=1!?__next_metadata_route__",nextConfigOutput:"",userland:a}),{requestAsyncStorage:S,staticGenerationAsyncStorage:j,serverHooks:F}=_,P="/sitemap.xml/route";function O(){return(0,s.patchFetch)({serverHooks:F,staticGenerationAsyncStorage:j})}},707:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),function(e,t){for(var r in t)Object.defineProperty(e,r,{enumerable:!0,get:t[r]})}(t,{resolveManifest:function(){return o},resolveRobots:function(){return a},resolveRouteData:function(){return s},resolveSitemap:function(){return n}});let i=r(1389);function a(e){let t="";for(let r of Array.isArray(e.rules)?e.rules:[e.rules]){for(let e of(0,i.resolveArray)(r.userAgent||["*"]))t+=`User-Agent: ${e}
+`;if(r.allow)for(let e of(0,i.resolveArray)(r.allow))t+=`Allow: ${e}
+`;if(r.disallow)for(let e of(0,i.resolveArray)(r.disallow))t+=`Disallow: ${e}
+`;r.crawlDelay&&(t+=`Crawl-delay: ${r.crawlDelay}
+`),t+="\n"}return e.host&&(t+=`Host: ${e.host}
+`),e.sitemap&&(0,i.resolveArray)(e.sitemap).forEach(e=>{t+=`Sitemap: ${e}
+`}),t}function n(e){let t=e.some(e=>Object.keys(e.alternates??{}).length>0),r="";for(let a of(r+='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',t?r+=' xmlns:xhtml="http://www.w3.org/1999/xhtml">\n':r+=">\n",e)){var i;r+=`<url>
+<loc>${a.url}</loc>
+`;let e=null==(i=a.alternates)?void 0:i.languages;if(e&&Object.keys(e).length)for(let t in e)r+=`<xhtml:link rel="alternate" hreflang="${t}" href="${e[t]}" />
+`;if(a.lastModified){let e=a.lastModified instanceof Date?a.lastModified.toISOString():a.lastModified;r+=`<lastmod>${e}</lastmod>
+`}a.changeFrequency&&(r+=`<changefreq>${a.changeFrequency}</changefreq>
+`),"number"==typeof a.priority&&(r+=`<priority>${a.priority}</priority>
+`),r+="</url>\n"}return r+"</urlset>\n"}function o(e){return JSON.stringify(e)}function s(e,t){return"robots"===t?a(e):"sitemap"===t?n(e):"manifest"===t?o(e):""}},1389:(e,t)=>{function r(e){return Array.isArray(e)?e:[e]}function i(e){if(null!=e)return r(e)}Object.defineProperty(t,"__esModule",{value:!0}),function(e,t){for(var r in t)Object.defineProperty(e,r,{enumerable:!0,get:t[r]})}(t,{resolveArray:function(){return r},resolveAsArrayOrUndefined:function(){return i}})}};var t=require("../../webpack-runtime.js");t.C(e);var r=e=>t(t.s=e),i=t.X(0,[948,518],()=>r(2792));module.exports=i})();

@@ -1,0 +1,38 @@
+"use strict";(()=>{var e={};e.id=904,e.ids=[904],e.modules={2934:e=>{e.exports=require("next/dist/client/components/action-async-storage.external.js")},4580:e=>{e.exports=require("next/dist/client/components/request-async-storage.external.js")},5869:e=>{e.exports=require("next/dist/client/components/static-generation-async-storage.external.js")},399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},7181:(e,t,r)=>{r.r(t),r.d(t,{GlobalError:()=>i.a,__next_app__:()=>u,originalPathname:()=>m,pages:()=>d,routeModule:()=>p,tree:()=>l}),r(1884),r(8702),r(1930),r(5866);var a=r(3191),s=r(8716),o=r(7922),i=r.n(o),n=r(5231),c={};for(let e in n)0>["default","tree","pages","GlobalError","originalPathname","__next_app__","routeModule"].indexOf(e)&&(c[e]=()=>n[e]);r.d(t,c);let l=["",{children:["terms-of-service",{children:["__PAGE__",{},{page:[()=>Promise.resolve().then(r.bind(r,1884)),"E:\\All Feb Projects 2025\\companies-website-next\\src\\app\\terms-of-service\\page.tsx"]}]},{}]},{layout:[()=>Promise.resolve().then(r.bind(r,8702)),"E:\\All Feb Projects 2025\\companies-website-next\\src\\app\\layout.tsx"],loading:[()=>Promise.resolve().then(r.bind(r,1930)),"E:\\All Feb Projects 2025\\companies-website-next\\src\\app\\loading.tsx"],"not-found":[()=>Promise.resolve().then(r.t.bind(r,5866,23)),"next/dist/client/components/not-found-error"]}],d=["E:\\All Feb Projects 2025\\companies-website-next\\src\\app\\terms-of-service\\page.tsx"],m="/terms-of-service/page",u={require:r,loadChunk:()=>Promise.resolve()},p=new a.AppPageRouteModule({definition:{kind:s.x.APP_PAGE,page:"/terms-of-service/page",pathname:"/terms-of-service",bundlePath:"",filename:"",appPaths:[]},userland:{loaderTree:l}})},1884:(e,t,r)=>{r.r(t),r.d(t,{default:()=>n,metadata:()=>o});var a=r(9510);r(1159);var s=r(4554);let o={title:"Terms of Service - Companies Directory",description:"Read our terms of service to understand the rules and guidelines for using Companies Directory."},i=[{title:"Acceptance of Terms",content:`By accessing and using Companies Directory ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use our service.
+
+We reserve the right to modify these terms at any time. We will notify users of any changes by updating the date at the top of this page. Continued use of the Service after changes constitutes acceptance of the modified terms.`},{title:"User Registration",content:`To access certain features of the Service, you may be required to register for an account. You agree to:
+    • Provide accurate and complete information
+    • Maintain and update your information
+    • Keep your account credentials secure
+    • Not share your account with others
+    • Notify us immediately of any unauthorized access`},{title:"Acceptable Use",content:`You agree not to:
+    • Use the Service for any illegal purpose
+    • Violate any laws or regulations
+    • Impersonate any person or entity
+    • Interfere with the Service's operation
+    • Attempt to gain unauthorized access
+    • Collect user information without consent
+    • Engage in automated data collection without permission
+    • Transmit malware or harmful code`},{title:"Content and Data",content:`The Service provides access to company information and related data. While we strive for accuracy:
+    • We do not guarantee the accuracy of information
+    • Data is provided "as is" without warranties
+    • Users should verify critical information independently
+    • We may update or modify data without notice
+    • Users are responsible for their use of the data`},{title:"Intellectual Property",content:`All content, features, and functionality of the Service, including but not limited to text, graphics, logos, and software, are owned by Companies Directory and protected by intellectual property laws.
+
+You may not:
+    • Copy, modify, or distribute our content
+    • Use our trademarks without permission
+    • Reverse engineer our software
+    • Remove copyright or proprietary notices`},{title:"Limitation of Liability",content:`To the maximum extent permitted by law, Companies Directory shall not be liable for:
+    • Direct, indirect, or consequential damages
+    • Loss of profits or data
+    • Business interruption
+    • Any damages arising from use of the Service
+    • Accuracy of information provided
+    • Third-party content or websites`},{title:"Termination",content:`We may terminate or suspend your access to the Service immediately, without prior notice or liability, for any reason, including:
+    • Violation of these Terms
+    • Fraudulent or illegal activities
+    • Harmful behavior to other users
+    • Non-payment of fees (if applicable)
+    • At our sole discretion`},{title:"Governing Law",content:"These Terms shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Bangalore, Karnataka, India."}];function n(){return a.jsx(s.X,{title:"Terms of Service",description:"Please read these terms carefully before using our service",children:(0,a.jsxs)("div",{className:"space-y-12",children:[(0,a.jsxs)("div",{className:"text-sm text-gray-500",children:["Last Updated: ",new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})]}),a.jsx("section",{className:"prose max-w-none",children:a.jsx("p",{className:"text-lg text-gray-700",children:'These Terms of Service ("Terms") govern your access to and use of Companies Directory, including any content, functionality, and services offered through our website. Please read these Terms carefully before using our service.'})}),a.jsx("div",{className:"space-y-8",children:i.map(e=>(0,a.jsxs)("section",{className:"bg-white p-6 rounded-lg border border-gray-200",children:[a.jsx("h2",{className:"text-xl font-bold text-gray-900 mb-4",children:e.title}),a.jsx("div",{className:"prose max-w-none",children:a.jsx("p",{className:"whitespace-pre-line text-gray-700",children:e.content})})]},e.title))}),(0,a.jsxs)("section",{className:"bg-blue-50 p-6 rounded-lg",children:[a.jsx("h2",{className:"text-xl font-bold text-gray-900 mb-4",children:"Contact Us"}),a.jsx("p",{className:"text-gray-700",children:"If you have any questions about these Terms of Service, please contact us at:"}),(0,a.jsxs)("div",{className:"mt-4",children:[a.jsx("p",{className:"text-gray-700",children:"Companies Directory"}),a.jsx("p",{className:"text-gray-700",children:"123 Business Avenue"}),a.jsx("p",{className:"text-gray-700",children:"Tech Park, Suite 456"}),a.jsx("p",{className:"text-gray-700",children:"Bangalore, Karnataka 560001"}),a.jsx("p",{className:"text-gray-700",children:"India"}),a.jsx("p",{className:"text-gray-700 mt-2",children:"Email: legal@companiesdirectory.com"})]})]})]})})}},4554:(e,t,r)=>{r.d(t,{X:()=>s});var a=r(9510);function s({children:e,title:t,description:r,className:s=""}){return a.jsx("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12",children:(0,a.jsxs)("div",{className:"max-w-4xl mx-auto",children:[(0,a.jsxs)("div",{className:"text-center mb-12",children:[a.jsx("h1",{className:"text-4xl font-bold text-gray-900 sm:text-5xl",children:t}),r&&a.jsx("p",{className:"mt-4 text-xl text-gray-600",children:r})]}),a.jsx("div",{className:`bg-white rounded-lg shadow-sm px-6 py-8 ${s}`,children:e})]})})}r(1159)}};var t=require("../../webpack-runtime.js");t.C(e);var r=e=>t(t.s=e),a=t.X(0,[948,810,687],()=>r(7181));module.exports=a})();

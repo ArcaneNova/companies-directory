@@ -1,0 +1,1 @@
+"use strict";exports.id=529,exports.ids=[529],exports.modules={5529:(e,s,t)=>{t.r(s),t.d(s,{CompanyMap:()=>o});let o=(0,t(8570).createProxy)(String.raw`E:\All Feb Projects 2025\companies-website-next\src\components\CompanyMap.tsx#CompanyMap`)}};
