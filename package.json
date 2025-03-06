@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate-sitemaps": "ts-node scripts/generate-sitemaps.ts",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "keywords": [],
   "author": "",
