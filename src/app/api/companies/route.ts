@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -10,9 +12,6 @@ export async function GET(request: Request) {
     const search = searchParams.get('search') || ''
 
     const skip = (page - 1) * limit
-
-    // Log the query parameters for debugging
-    console.log('Query params:', { page, limit, skip, search })
 
     // Build the where clause
     const where: Prisma.CompaniesDataWhereInput = search
@@ -44,26 +43,9 @@ export async function GET(request: Request) {
           authorized_capital: true,
           paidup_capital: true,
         },
-      }).catch(error => {
-        console.error('Error fetching companies:', error)
-        throw new Error('Failed to fetch companies')
       }),
-      prisma.companiesData.count({ where }).catch(error => {
-        console.error('Error counting companies:', error)
-        throw new Error('Failed to count companies')
-      }),
+      prisma.companiesData.count({ where }),
     ])
-
-    // Log the results for debugging
-    console.log('Query results:', {
-      totalCompanies: total,
-      fetchedCompanies: companies.length,
-      totalPages: Math.ceil(total / limit),
-    })
-
-    if (!companies) {
-      throw new Error('No companies data received')
-    }
 
     return NextResponse.json({
       companies,

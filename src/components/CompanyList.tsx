@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -53,20 +53,137 @@ function getPaginationRange(currentPage: number, totalPages: number) {
   return rangeWithDots;
 }
 
+function CompanyListContent({
+  companies,
+  total,
+  totalPages,
+  currentPage,
+}: {
+  companies: Company[]
+  total: number
+  totalPages: number
+  currentPage: number
+}) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const createQueryString = (name: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(name, value)
+    return params.toString()
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {companies.map((company) => (
+          <Link
+            key={company.id}
+            href={`/company/${company.url_title || company.id}`}
+            className="block p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+          >
+            <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">
+              {company.company_name}
+            </h2>
+            {company.cin && (
+              <p className="mt-2 text-sm text-gray-600">CIN: {company.cin}</p>
+            )}
+            {company.company_category && (
+              <p className="mt-2 text-sm text-gray-600">
+                Category: {company.company_category}
+              </p>
+            )}
+            <span
+              className={`mt-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                company.company_status?.toLowerCase() === 'active'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-red-100 text-red-800'
+              }`}
+            >
+              {company.company_status}
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2">
+          {currentPage > 1 && (
+            <button
+              onClick={() =>
+                router.push(
+                  `/?${createQueryString('page', (currentPage - 1).toString())}`
+                )
+              }
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Previous
+            </button>
+          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1)
+            .filter(
+              (page) =>
+                page === 1 ||
+                page === totalPages ||
+                (page >= currentPage - 2 && page <= currentPage + 2)
+            )
+            .map((page) => {
+              const isCurrentPage = page === currentPage
+              return (
+                <React.Fragment key={page}>
+                  {page > 1 &&
+                    page < totalPages &&
+                    Math.abs(page - currentPage) > 2 && (
+                      <span className="px-4 py-2 text-sm text-gray-700">...</span>
+                    )}
+                  <button
+                    onClick={() =>
+                      router.push(`/?${createQueryString('page', page.toString())}`)
+                    }
+                    className={`px-4 py-2 text-sm font-medium rounded-md ${
+                      isCurrentPage
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                </React.Fragment>
+              )
+            })}
+          {currentPage < totalPages && (
+            <button
+              onClick={() =>
+                router.push(
+                  `/?${createQueryString('page', (currentPage + 1).toString())}`
+                )
+              }
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            >
+              Next
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function CompanyList({ initialPage, initialSearch }: CompanyListProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [companies, setCompanies] = useState<Company[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [totalPages, setTotalPages] = useState(0)
-  const [total, setTotal] = useState(0)
-  const [retryCount, setRetryCount] = useState(0)
+  const [companies, setCompanies] = React.useState<Company[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
+  const [totalPages, setTotalPages] = React.useState(0)
+  const [total, setTotal] = React.useState(0)
+  const [retryCount, setRetryCount] = React.useState(0)
 
   const currentPage = Number(searchParams.get('page')) || initialPage
   const search = searchParams.get('search') || initialSearch
 
-  useEffect(() => {
+  React.useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
 
@@ -139,19 +256,13 @@ export function CompanyList({ initialPage, initialSearch }: CompanyListProps) {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="text-center text-gray-600">Loading companies...</div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
+      <div className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-lg shadow-sm p-6 animate-pulse"
-            >
-              <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-            </div>
+              className="h-32 bg-gray-100 animate-pulse rounded-lg"
+            />
           ))}
         </div>
       </div>
@@ -187,85 +298,27 @@ export function CompanyList({ initialPage, initialSearch }: CompanyListProps) {
     )
   }
 
-  const paginationRange = getPaginationRange(currentPage, totalPages);
-
   return (
-    <div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {companies.map((company) => (
-          <Link
-            key={company.id}
-            href={`/company/${company.url_title || company.id}`}
-            className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
-          >
-            <h2 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
-              {company.company_name}
-            </h2>
-            {company.cin && (
-              <p className="text-sm text-gray-600 mb-2">CIN: {company.cin}</p>
-            )}
-            {company.company_category && (
-              <p className="text-sm text-gray-600 mb-2">
-                Category: {company.company_category}
-              </p>
-            )}
-            {company.company_status && (
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                company.company_status.toLowerCase() === 'active'
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                {company.company_status}
-              </span>
-            )}
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-4 text-sm text-gray-600">
-        Showing {companies.length} of {total.toLocaleString()} companies
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center mt-8 gap-2">
-          {currentPage > 1 && (
-            <Link
-              href={`/?page=${currentPage - 1}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
-              className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-            >
-              Previous
-            </Link>
-          )}
-          
-          {paginationRange.map((pageNum, index) => (
-            <React.Fragment key={index}>
-              {pageNum === '...' ? (
-                <span className="px-4 py-2">...</span>
-              ) : (
-                <Link
-                  href={`/?page=${pageNum}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
-                  className={`px-4 py-2 rounded ${
-                    currentPage === pageNum
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  {pageNum}
-                </Link>
-              )}
-            </React.Fragment>
-          ))}
-
-          {currentPage < totalPages && (
-            <Link
-              href={`/?page=${currentPage + 1}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
-              className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-            >
-              Next
-            </Link>
-          )}
+    <Suspense
+      fallback={
+        <div className="space-y-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-32 bg-gray-100 animate-pulse rounded-lg"
+              />
+            ))}
+          </div>
         </div>
-      )}
-    </div>
+      }
+    >
+      <CompanyListContent
+        companies={companies}
+        total={total}
+        totalPages={totalPages}
+        currentPage={currentPage}
+      />
+    </Suspense>
   )
 } 

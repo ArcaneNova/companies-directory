@@ -52,6 +52,39 @@ ${sitemapFiles.map(file => `  <sitemap>
   await fs.promises.writeFile(path.join(process.cwd(), 'public', 'sitemap.xml'), mainSitemapXml)
 }
 
+const staticUrls: MetadataRoute.Sitemap = [
+  {
+    url: BASE_URL,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 1,
+  },
+  {
+    url: `${BASE_URL}/about`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  },
+  {
+    url: `${BASE_URL}/contact`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  },
+  {
+    url: `${BASE_URL}/privacy-policy`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  },
+  {
+    url: `${BASE_URL}/terms-of-service`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  },
+]
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Ensure sitemaps directory exists
   const sitemapDir = path.join(process.cwd(), SITEMAP_DIR)
@@ -59,17 +92,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     await fs.promises.mkdir(sitemapDir, { recursive: true })
   }
 
-  // Generate static routes sitemap
-  const staticUrls: SitemapUrl[] = [
-    { url: BASE_URL, changefreq: 'daily', priority: 1.0 },
-    { url: `${BASE_URL}/about`, changefreq: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/contact`, changefreq: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/privacy-policy`, changefreq: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/terms-of-service`, changefreq: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/faq`, changefreq: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/help-center`, changefreq: 'weekly', priority: 0.7 },
-  ]
+  // Get all companies
+  const companies = await prisma.companiesData.findMany({
+    select: {
+      id: true,
+      url_title: true,
+      company_reg_date: true,
+      company_status: true,
+    },
+    orderBy: {
+      company_reg_date: 'desc',
+    },
+    take: 50000, // Limit to 50k most recent companies for performance
+  })
 
+  const companyUrls: MetadataRoute.Sitemap = companies.map((company) => ({
+    url: `${BASE_URL}/company/${company.url_title || company.id}`,
+    lastModified: company.company_reg_date || new Date(),
+    changeFrequency: 'monthly',
+    priority: company.company_status?.toLowerCase() === 'active' ? 0.8 : 0.5,
+  }))
+
+  // Generate static routes sitemap
   await createSitemapXml(staticUrls, 'sitemap-static.xml')
   const sitemapFiles = ['sitemap-static.xml']
 
@@ -139,5 +183,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await createSitemapIndex(sitemapFiles)
 
   // Return the static URLs for Next.js built-in sitemap
-  return staticUrls
+  return [...staticUrls, ...companyUrls]
 } 

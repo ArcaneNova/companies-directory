@@ -1,15 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-export function Header() {
+function HeaderContent() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const [searchQuery, setSearchQuery] = React.useState(searchParams.get('search') || '')
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,5 +152,21 @@ export function Header() {
         )}
       </div>
     </header>
+  )
+}
+
+export function Header() {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full h-20 animate-pulse" />
+          </div>
+        </div>
+      }
+    >
+      <HeaderContent />
+    </Suspense>
   )
 } 
