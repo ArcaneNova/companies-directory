@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-sitemaps": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/generate-sitemaps.ts",
-    "postbuild": "npm run generate-sitemaps"
+    "generate-sitemaps": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/generate-sitemaps.ts"
   },
   "keywords": [],
   "author": "",
