@@ -1,8 +1,23 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { handleDatabaseError } from '@/lib/error-handler'
 
 export const dynamic = 'force-dynamic'
+
+type CompanyResponse = {
+  id: number
+  company_name: string | null
+  cin: string | null
+  company_category: string | null
+  company_subcategory: string | null
+  reg_office_address: string | null
+  url_title: string | null
+  company_status: string | null
+  company_state_code: string | null
+  authorized_capital: Prisma.Decimal | null
+  paidup_capital: Prisma.Decimal | null
+}
 
 export async function GET(request: Request) {
   try {
@@ -23,29 +38,34 @@ export async function GET(request: Request) {
         }
       : {}
 
-    // Execute queries in parallel
-    const [companies, total] = await Promise.all([
-      prisma.companiesData.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: { company_name: 'asc' },
-        select: {
-          id: true,
-          company_name: true,
-          cin: true,
-          company_category: true,
-          company_subcategory: true,
-          reg_office_address: true,
-          url_title: true,
-          company_status: true,
-          company_state_code: true,
-          authorized_capital: true,
-          paidup_capital: true,
-        },
-      }),
-      prisma.companiesData.count({ where }),
-    ])
+    // Execute queries in parallel with a timeout
+    const [companies, total] = await Promise.race([
+      Promise.all([
+        prisma.companiesData.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { company_name: 'asc' },
+          select: {
+            id: true,
+            company_name: true,
+            cin: true,
+            company_category: true,
+            company_subcategory: true,
+            reg_office_address: true,
+            url_title: true,
+            company_status: true,
+            company_state_code: true,
+            authorized_capital: true,
+            paidup_capital: true,
+          },
+        }) as Promise<CompanyResponse[]>,
+        prisma.companiesData.count({ where }),
+      ]),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Database query timeout')), 10000)
+      ),
+    ]) as [CompanyResponse[], number]
 
     return NextResponse.json({
       companies,
@@ -56,13 +76,6 @@ export async function GET(request: Request) {
       limit,
     })
   } catch (error) {
-    console.error('Error in companies API:', error)
-    return NextResponse.json(
-      { 
-        error: 'Internal Server Error',
-        message: error instanceof Error ? error.message : 'Unknown error occurred',
-      },
-      { status: 500 }
-    )
+    return handleDatabaseError(error)
   }
 } 

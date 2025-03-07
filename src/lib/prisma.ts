@@ -6,7 +6,8 @@ const globalForPrisma = globalThis as unknown as {
 
 const prismaClientSingleton = () => {
   return new PrismaClient({
-    log: ['error']
+    log: ['error'],
+    errorFormat: 'minimal'
   })
 }
 
@@ -19,4 +20,16 @@ if (process.env.NODE_ENV !== 'production') {
 // Handle cleanup
 process.on('beforeExit', async () => {
   await prisma.$disconnect()
+})
+
+// Handle unexpected errors
+process.on('unhandledRejection', async (error) => {
+  console.error('Unhandled Promise Rejection:', error)
+  await prisma.$disconnect()
+})
+
+process.on('uncaughtException', async (error) => {
+  console.error('Uncaught Exception:', error)
+  await prisma.$disconnect()
+  process.exit(1)
 }) 
